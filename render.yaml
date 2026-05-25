@@ -14,7 +14,7 @@ services:
     name: gaze-api-backend
     runtime: docker
     dockerContext: backend
-    dockerfilePath: Dockerfile
+    dockerfilePath: ./backend/Dockerfile
     plan: free # Free tier instance
     envVars:
       # Auto-linked Database Connection String from PostgreSQL service
