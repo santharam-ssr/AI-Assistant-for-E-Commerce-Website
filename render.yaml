@@ -1,0 +1,44 @@
+# Gaze Premium E-commerce Assistant Render Blueprint
+#
+# This blueprint automates the deployment of the FastAPI backend and a hosted
+# PostgreSQL database with a single click.
+
+databases:
+  - name: gaze-postgres-db
+    databaseName: gaze_db
+    user: gaze_user
+    plan: free # Free tier database (automatically deleted after 90 days of inactivity)
+
+services:
+  - type: web
+    name: gaze-api-backend
+    runtime: docker
+    dockerContext: backend
+    dockerfilePath: Dockerfile
+    plan: free # Free tier instance
+    envVars:
+      # Auto-linked Database Connection String from PostgreSQL service
+      - key: DATABASE_URL
+        fromDatabase:
+          name: gaze-postgres-db
+          property: connectionString
+
+      # Secure random JWT Secret generated automatically by Render
+      - key: JWT_SECRET
+        generateValue: true
+
+      # The LLM Provider to use ('gemini' or 'openai')
+      - key: LLM_PROVIDER
+        value: gemini
+
+      # Gemini API Key (Must be set manually in Render Dashboard once created)
+      - key: GEMINI_API_KEY
+        sync: false
+
+      # OpenAI API Key (Optional fallback)
+      - key: OPENAI_API_KEY
+        sync: false
+
+      # Allow standard CORS origin mappings
+      - key: BACKEND_CORS_ORIGINS
+        value: '["*"]'

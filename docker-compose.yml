@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      # Exclude virtual environment or cache folders from host mounting to prevent OS mismatches
+      - /app/backend/.venv
+      - /app/backend/__pycache__
+    environment:
+      - DATABASE_URL=sqlite:///./ecommerce.db
+      - CHROMA_PERSIST_DIRECTORY=./chroma_db
+      - LLM_PROVIDER=gemini # Toggle to 'openai' if desired
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/frontend/node_modules
+      - /app/frontend/.next
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+    restart: always

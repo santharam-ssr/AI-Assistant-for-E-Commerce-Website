@@ -1,0 +1,36 @@
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Databases & Vector store directories
+*.db
+chroma_db/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.next/
+out/
+build/
+dist/
+
+# Environmental credentials
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS Files
+.DS_Store
+Thumbs.db
